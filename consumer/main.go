@@ -1,6 +1,10 @@
 package main
 
-import "github.com/Shopify/sarama"
+import (
+	"fmt"
+
+	"github.com/Shopify/sarama"
+)
 
 func main() {
 
@@ -13,5 +17,24 @@ func main() {
 	}
 
 	defer consumer.Close()
+
+	partitionConsumer, err := consumer.ConsumePartition("bosshello", 0, sarama.OffsetNewest)
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer partitionConsumer.Close()
+
+	fmt.Print("Consumer start.")
+
+	for {
+		select {
+		case err := <-partitionConsumer.Errors():
+			fmt.Println(err)
+		case msg := <-partitionConsumer.Messages():
+			fmt.Println(string(msg.Value))
+		}
+	}
 
 }
