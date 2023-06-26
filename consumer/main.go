@@ -12,8 +12,6 @@ func main() {
 		panic(err)
 	}
 
-	consumer.Close()
-	defer 
-
+	defer consumer.Close()
 
 }
