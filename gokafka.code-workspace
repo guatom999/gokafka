@@ -9,6 +9,9 @@
 		},
 		{
 			"path": "producer"
+		},
+		{
+			"path": "events"
 		}
 	],
 	"settings": {}
