@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type BankAccount struct {
 	ID            string
 	AccountHolder string
-	AccountType   string
+	AccountType   int
 	Balance       float64
 }
 
@@ -35,9 +35,15 @@ func (obj accountRepository) Delete(id string) error {
 }
 
 func (obj accountRepository) FindAll() (bankAccounts []BankAccount, err error) {
-	err := obj.db.Table("banks").Find(&bankAccounts).Error
+	err = obj.db.Table("banks").Find(&bankAccounts).Error
+
+	return bankAccounts, err
+
 }
 
 func (obj accountRepository) FindById(id string) (bankAccount BankAccount, err error) {
-	return bankAccount, nil
+	// err = obj.db.Table("banks").Where("id=?", id).First(&bankAccount, id).Error
+	err = obj.db.Table("banks").Where("id=?", id).First(&bankAccount).Error
+
+	return bankAccount, err
 }
