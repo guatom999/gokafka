@@ -12,7 +12,7 @@ services:
     ports:
       - 9092:9092
     volumes:
-      - ./kafka:/bitnami/kafka/data
+      - ./kafka:/bitnami
     environment:
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_CFG_LISTENDERS=PLAINTEXT://:9092
