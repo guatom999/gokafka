@@ -27,7 +27,7 @@ func NewAccountRepositoryDB(db *gorm.DB) AccountRepository {
 }
 
 func (obj accountRepository) Save(bankAccount BankAccount) error {
-	return obj.db.Save(bankAccount).Error
+	return obj.db.Table("banks").Save(bankAccount).Error
 }
 
 func (obj accountRepository) Delete(id string) error {
