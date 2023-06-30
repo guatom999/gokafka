@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"producer/controller"
+	"producer/services"
 
 	"github.com/Shopify/sarama"
+	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -35,6 +38,8 @@ func initData() *gorm.DB {
 
 func main() {
 
+	app := fiber.New()
+
 	producer, err := sarama.NewSyncProducer(viper.GetStringSlice("kafka.servers"), nil)
 
 	if err != nil {
@@ -42,6 +47,17 @@ func main() {
 	}
 
 	defer producer.Close()
+
+	eventProducer := services.NewEventProducer(producer)
+	accountService := services.NewAccountService(eventProducer)
+	accountController := controller.NewAccountController(accountService)
+
+	app.Post("/openAccount", accountController.OpenAccount)
+	app.Post("/depositFund", accountController.DepositFund)
+	app.Post("/withdrawFund", accountController.WithdrawFund)
+	app.Post("/closeAccount", accountController.CloseAccount)
+
+	app.Listen(":8000")
 
 }
 

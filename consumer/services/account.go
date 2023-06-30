@@ -107,7 +107,7 @@ func (a accountEventHandler) Handle(topic string, eventBytes []byte) {
 			return
 		}
 
-		err = a.accountRepo.Delete(event.Id)
+		err = a.accountRepo.Delete(event.ID)
 
 		if err != nil {
 			log.Println(err)

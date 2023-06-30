@@ -9,6 +9,9 @@ var Topics = []string{
 	reflect.TypeOf(CloseAccountEvent{}).Name(),
 }
 
+type Event interface {
+}
+
 type OpenAccountEvent struct {
 	ID             string
 	AccountHolder  string
@@ -27,5 +30,5 @@ type WithdrawFundEvent struct {
 }
 
 type CloseAccountEvent struct {
-	Id string
+	ID string
 }
