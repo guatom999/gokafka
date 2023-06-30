@@ -23,6 +23,7 @@ func NewAccountEventHandler(accountRepo repositories.AccountRepository) EventHan
 func (a accountEventHandler) Handle(topic string, eventBytes []byte) {
 	switch topic {
 	case reflect.TypeOf(events.OpenAccountEvent{}).Name():
+		log.Println("OpenAccountEvent{}")
 		event := &events.OpenAccountEvent{}
 		err := json.Unmarshal(eventBytes, event)
 		if err != nil {

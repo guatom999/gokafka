@@ -1,39 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"producer/controller"
 	"producer/services"
+	"strings"
 
 	"github.com/Shopify/sarama"
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
-func initData() *gorm.DB {
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v",
-		viper.GetString("db.username"),
-		viper.GetString("db.password"),
-		viper.GetString("db.host"),
-		viper.GetString("db.port"),
-		viper.GetString("db.database"),
-	)
-
-	dial := mysql.Open(dsn)
-
-	db, err := gorm.Open(dial, &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
-	})
-
-	if err != nil {
+func init() {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
 	}
-
-	return db
-
 }
 
 func main() {
